@@ -1,51 +1,52 @@
 # Swift-Packer CLI 📦
 
-**Swift-Packer** — это простая консольная утилита для iOS-разработчиков, которая собирает весь исходный код проекта Swift в один текстовый файл. 
+**Swift-Packer** is a simple command-line utility for iOS developers that bundles all source code from a Swift project into a single text file.
 
-Этот инструмент специально создан для подготовки контекста при работе с LLM (ChatGPT, Claude, и другие), позволяя передать весь проект одним файлом, сохраняя структуру папок и контекст расположения файлов.
+This tool is specifically designed for preparing context when working with LLMs (ChatGPT, Claude, and others), allowing you to pass the entire project in one file while preserving folder structure and file location context.
 
-## ✨ Особенности
+## ✨ Features
 
-- 📂 **Генерация дерева проекта**: В начале файла создается наглядная структура каталогов.
-- 🧹 **Умная фильтрация**: Автоматически игнорирует `Pods`, `DerivedData`, `.git`, `build` и другие системные папки.
-- 🎨 **Markdown-подсветка**: Весь код внутри итогового файла обернут в блоки ` ```swift `, что помогает нейросетям лучше понимать синтаксис.
-- 🧩 **Легкость**: Написано на чистом Python, не требует внешних зависимостей.
+- 📂 **Project Tree Generation**: Creates a visual directory structure at the beginning of the file.
+- 🧹 **Smart Filtering**: Automatically ignores `Pods`, `DerivedData`, `.git`, `build`, and other system folders.
+- 🎨 **Markdown Highlighting**: All code in the output file is wrapped in ` ```swift ` blocks, helping neural networks better understand the syntax.
+- 🧩 **Lightweight**: Written in pure Python, requires no external dependencies.
 
-## 🚀 Установка
+## 🚀 Installation
 
-Чтобы использовать утилиту как системную команду из любой папки:
+To use the utility as a system command from any folder:
 
-1. Убедитесь, что у вас есть файл `packer.py`.
-2. Перемести файл
+1. Make sure you have the `packer.py` file.
+2. Move the file
    ```bash
    mv packer.py /usr/local/bin/swift-pack
-
-3. Сделайте файл исполняемым:
+   ```
+3. Make the file executable:
    ```bash
    chmod +x packer.py
+   ```
 
-## 📖 Использование
-Просто перейдите в корневую папку вашего Swift-проекта и запустите:
+## 📖 Usage
+Simply navigate to the root folder of your Swift project and run:
 
 ```bash
 swift-pack
 ```
 
-### Дополнительные параметры
-* Указать путь к проекту (если вы не в его папке):
+### Additional Parameters
+* Specify the project path (if you're not in its folder):
 
 ```bash
 swift-pack /path/to/your/project
 ```
 
-* Изменить имя выходного файла:
+* Change the output file name:
 
 ```bash
 swift-pack . -o my_project_context.txt
 ```
 
-## 📋 Пример вывода
-Итоговый файл project_bundle.txt будет выглядеть так:
+## 📋 Example Output
+The resulting file project_bundle.txt will look like this:
 
 ```
 PROJECT STRUCTURE:
@@ -66,17 +67,17 @@ struct User {
 --- FILE END: Models/User.swift ---
 ```
 
-## 💡 Совет по работе с ChatGPT / Claude
+## 💡 Tip for Working with ChatGPT / Claude
 
-После генерации файла просто перетащите полученный `.txt` файл в окно чата и используйте следующий промпт:
+After generating the file, simply drag the resulting `.txt` file into the chat window and use the following prompt:
 
-> Я загрузил файл с кодом моего проекта. В начале файла приведена структура папок для понимания архитектуры. Проанализируй этот код и [твой вопрос: например, найди утечки памяти или предложи рефакторинг].
+> I have uploaded a file with my project's code. The file begins with a folder structure for understanding the architecture. Analyze this code and [your question: for example, find memory leaks or suggest refactoring].
 
-## 🛠 Исключения по умолчанию
-Скрипт автоматически пропускает следующие папки, чтобы не тратить токены:
+## 🛠 Default Exclusions
+The script automatically skips the following folders to save tokens:
 - `.git`, `Pods`, `.build`, `DerivedData`
 - `build`, `tests`, `Fastlane`
 - `.xcodeproj`, `.xcworkspace`
 
 ---
-Создано для удобной разработки на Swift 🚀
+Created for convenient Swift development 🚀
