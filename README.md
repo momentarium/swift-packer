@@ -72,6 +72,8 @@ struct User {
 After generating the file, simply drag the resulting `.txt` file into the chat window and use the following prompt:
 
 > I have uploaded a file with my project's code. The file begins with a folder structure for understanding the architecture. Analyze this code and [your question: for example, find memory leaks or suggest refactoring].
+or in Russian:
+> Я загрузил файл с кодом моего проекта. В начале файла приведена структура папок для понимания архитектуры. Проанализируй этот код и [твой вопрос: например, найди утечки памяти или предложи рефакторинг]
 
 ## 🛠 Default Exclusions
 The script automatically skips the following folders to save tokens:
