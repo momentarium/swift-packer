@@ -1,159 +1,10 @@
 # Swift-Packer CLI 📦
 
-English documentation is here. For the Russian version, see [README_ru.md](README_ru.md).
+> English version: [README.md](README.md)
 
-## English
+Русская документация для удобства использования.
 
-Swift-Packer is a simple command-line utility for iOS developers that bundles Swift source files and common text-based project assets into a single text file.
-
-This tool is specifically designed for preparing context when working with LLMs (ChatGPT, Claude, and others), allowing you to pass the entire project in one file while preserving folder structure and file location context.
-
-## Features
-
-* 📂 Project Tree Generation: Creates a visual directory structure at the beginning of the file.
-* 🧹 Smart Filtering: Automatically ignores `Pods`, `DerivedData`, `.git`, `build`, and other system folders.
-* 🎯 Custom Exclusions: Exclude any additional files or folders using glob patterns or exact relative paths (for example `Mocks`, `*.generated.swift`, `Views/Legacy/*`, or `StoreSync/Localizable.xcstrings`).
-* 🎨 Markdown Highlighting: Included files are wrapped in fenced code blocks with a language hint, such as `swift` for Swift sources and `text` for other text-based assets.
-* 🧩 Lightweight: Written in pure Python, requires no external dependencies.
-
-## Installation
-
-To use the utility as a system command from any folder:
-
-1. Make sure you have the `packer.py` file.
-2. Move the file
-
-```
-mv packer.py /usr/local/bin/swift-pack
-```
-
-3. Make the file executable:
-
-```
-chmod +x packer.py
-```
-
-## Usage
-
-Simply navigate to the root folder of your Swift project and run:
-
-```
-swift-pack
-```
-
-### Additional Parameters
-
-* Specify the project path (if you're not in its folder):
-
-```
-swift-pack /path/to/your/project
-```
-
-* Change the output file name:
-
-```
-swift-pack . -o my_project_context.txt
-```
-
-* Exclude specific files or folders from the result:
-
-```
-swift-pack . -e Mocks
-```
-
-* Exclude multiple patterns at once:
-
-```
-swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*"
-```
-
-* Exclude a specific file by relative path:
-
-```
-swift-pack . -e StoreSync/Localizable.xcstrings
-```
-
-## Example Output
-
-The resulting file project_bundle.txt will look like this:
-
-```
-PROJECT STRUCTURE:
-================================================
-Root: MyApp
-├── Models/
-│   └── User.swift
-├── Views/
-│   └── MainView.swift
-└── AppDelegate.swift
-================================================
-
---- FILE START: Models/User.swift ---
-```swift
-struct User {
-    let name: String
-}
---- FILE END: Models/User.swift ---
-
-```
-
-## Tips for Working with ChatGPT / Claude
-
-After generating the file, simply drag the resulting `.txt` file into the chat window and use the following prompt:
-
-```
-I have uploaded a file with my project's code. The file begins with a folder structure for understanding the architecture. Analyze this code and [your question: for example, find memory leaks or suggest refactoring].
-```
-
-or in Russian:
-
-```
-Я загрузил файл с кодом моего проекта. В начале файла приведена структура папок для понимания архитектуры. Проанализируй этот код и [твой вопрос: например, найди утечки памяти или предложи рефакторинг]
-```
-
-## Default Exclusions
-
-The script automatically skips the following folders to save tokens:
-
-* `.git`, `Pods`, `.build`, `DerivedData`
-* `build`, `tests`, `Fastlane`
-* `.xcodeproj`, `.xcworkspace`
-
-## Custom Exclusions (`-e` / `--exclude`)
-
-Beyond the default exclusions, you can exclude any additional files or directories using the `-e` (or `--exclude`) flag. It accepts one or more patterns and works on:
-
-* File or folder **names**, e.g. `-e Mocks` will exclude any file or folder named `Mocks` at any level of the project.
-* **Wildcards**, e.g. `-e "*.generated.swift"` will exclude all files ending in `.generated.swift`.
-* **Relative paths**, e.g. `-e "Views/Legacy/*"` will exclude everything inside `Views/Legacy/`, and `-e "StoreSync/Localizable.xcstrings"` will exclude that exact file.
-
-Excluded folders and files are also removed from the project tree at the top of the output file (empty folders left over after filtering won't be shown either).
-
-Examples:
-
-```
-# Exclude a single folder anywhere in the project
-swift-pack . -e Mocks
-
-# Exclude generated files
-swift-pack . -e "*.generated.swift"
-
-# Exclude a specific nested folder
-swift-pack . -e "Views/Legacy/*"
-
-# Exclude a concrete file by relative path
-swift-pack . -e "StoreSync/Localizable.xcstrings"
-
-# Combine several patterns at once
-swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*" "*Tests.swift"
-```
-## Supported Files
-Supported bundle content includes common source and text-based resource files such as `.swift`, `.strings`, `.xcstrings`, `.plist`, `.json`, `.yaml`, `.yml`, `.xml`, and similar text files.
-
-> ⚠️ Tip: quote patterns that contain `*` (e.g. `"*.generated.swift"`) so your shell doesn't try to expand them itself.
-
-Created for convenient Swift development 🚀
-
+Swift-Packer — это простой инструмент командной строки для iOS-разработчиков, который упаковывает Swift-файлы и текстовые проектные ресурсы в один текстовый файл.
 
 Этот инструмент специально создан для подготовки контекста при работе с LLM (ChatGPT, Claude и другими), позволяя передать весь проект в одном файле с сохранением структуры папок и расположения файлов.
 
@@ -192,7 +43,7 @@ swift-pack
 
 ### Дополнительные параметры
 
-* Укажите путь к проекту, если вы не находитесь в его папке:
+* Укажите путь к проекту, если вы не находитесь в его каталке:
 
 ```
 swift-pack /path/to/your/project
