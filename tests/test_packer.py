@@ -133,3 +133,20 @@ def test_default_exclusions_are_applied_to_tree_and_contents(tmp_path):
     assert "struct Derived {}" not in content
     assert "struct BuildOutput {}" not in content
     assert "struct Tests {}" not in content
+
+
+def test_non_swift_text_files_can_be_excluded(tmp_path):
+    project_dir = tmp_path / "ResourcesProject"
+    project_dir.mkdir()
+
+    write_file(project_dir / "StoreSync" / "Localizable.xcstrings", '"greeting" = "Hello";\n')
+    write_file(project_dir / "StoreSync" / "View.swift", "struct View {}\n")
+
+    run_packer(str(project_dir), "-e", "StoreSync/Localizable.xcstrings")
+
+    output_path = project_dir / "project_bundle.txt"
+    content = output_path.read_text(encoding="utf-8")
+
+    assert "struct View {}" in content
+    assert "greeting" not in content
+    assert "Localizable.xcstrings" not in content

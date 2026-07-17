@@ -37,6 +37,29 @@ def is_excluded(rel_path: Path, patterns) -> bool:
     return False
 
 
+SUPPORTED_EXTENSIONS = {
+    '.swift', '.strings', '.xcstrings', '.plist', '.json', '.yaml', '.yml', '.xml',
+    '.h', '.m', '.mm', '.c', '.cpp', '.hpp', '.cc', '.cxx', '.kt', '.java', '.rb', '.py', '.sh'
+}
+
+
+def is_bundle_file(path: Path) -> bool:
+    """Определяет, является ли файл подходящим для включения в bundle."""
+    if not path.is_file():
+        return False
+
+    if path.suffix.lower() not in SUPPORTED_EXTENSIONS:
+        return False
+
+    try:
+        with path.open('rb') as handle:
+            chunk = handle.read(1024)
+    except OSError:
+        return False
+
+    return b'\x00' not in chunk
+
+
 def get_tree(path, root_path, exclude_patterns, prefix=""):
     """Рекурсивно строит текстовое дерево проекта."""
     tree = ""
@@ -56,11 +79,10 @@ def get_tree(path, root_path, exclude_patterns, prefix=""):
     entries = []
     for p in filtered:
         if p.is_dir():
-            new_prefix_placeholder = ""  # посчитаем позже с правильным prefix
             subtree = get_tree(p, root_path, exclude_patterns, "")
             if subtree.strip():
                 entries.append((p, subtree))
-        elif p.suffix == ".swift":
+        elif p.is_file() and is_bundle_file(p):
             entries.append((p, None))
 
     for i, (p, _) in enumerate(entries):
@@ -94,7 +116,10 @@ def pack_project(input_dir, output_file, exclude_patterns):
         out.write("================================================\n\n")
 
         # 2. Собираем содержимое файлов
-        for path in root_path.rglob("*.swift"):
+        for path in root_path.rglob("*"):
+            if not path.is_file():
+                continue
+
             # Проверка дефолтных исключенных папок
             if any(part in EXCLUDE_DIRS for part in path.parts):
                 continue
@@ -105,8 +130,12 @@ def pack_project(input_dir, output_file, exclude_patterns):
             if is_excluded(relative_path, exclude_patterns):
                 continue
 
+            if not is_bundle_file(path):
+                continue
+
             out.write(f"\n\n--- FILE START: {relative_path} ---\n")
-            out.write("```swift\n")
+            language = "swift" if path.suffix == ".swift" else "text"
+            out.write(f"```{language}\n")
             try:
                 out.write(path.read_text(encoding='utf-8'))
             except Exception as e:
