@@ -1,6 +1,8 @@
 # Swift-Packer CLI 📦
 
-English documentation is here. For the Russian version, see [README_ru.md](README_ru.md).
+## Choose your documentation
+
+[🇺🇸 English version](README.md) · [🇷🇺 Русская версия](README_ru.md)
 
 ## English
 
