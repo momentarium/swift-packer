@@ -1,6 +1,6 @@
 Swift-Packer CLI 📦
 
-Swift-Packer is a simple command-line utility for iOS developers that bundles all source code from a Swift project into a single text file.
+Swift-Packer is a simple command-line utility for iOS developers that bundles Swift source files and common text-based project assets into a single text file.
 
 This tool is specifically designed for preparing context when working with LLMs (ChatGPT, Claude, and others), allowing you to pass the entire project in one file while preserving folder structure and file location context.
 
@@ -8,8 +8,8 @@ This tool is specifically designed for preparing context when working with LLMs 
 
 * 📂 Project Tree Generation: Creates a visual directory structure at the beginning of the file.
 * 🧹 Smart Filtering: Automatically ignores `Pods`, `DerivedData`, `.git`, `build`, and other system folders.
-* 🎯 Custom Exclusions: Exclude any additional files or folders using glob patterns (e.g. `Mocks`, `*.generated.swift`, `Views/Legacy/*`).
-* 🎨 Markdown Highlighting: All code in the output file is wrapped in ````swift` blocks, helping neural networks better understand the syntax.
+* 🎯 Custom Exclusions: Exclude any additional files or folders using glob patterns or exact relative paths (for example `Mocks`, `*.generated.swift`, `Views/Legacy/*`, or `StoreSync/Localizable.xcstrings`).
+* 🎨 Markdown Highlighting: Included files are wrapped in fenced code blocks with a language hint, such as `swift` for Swift sources and `text` for other text-based assets.
 * 🧩 Lightweight: Written in pure Python, requires no external dependencies.
 
 🚀 Installation
@@ -63,6 +63,12 @@ swift-pack . -e Mocks
 swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*"
 ```
 
+* Exclude a specific file by relative path:
+
+```
+swift-pack . -e StoreSync/Localizable.xcstrings
+```
+
 📋 Example Output
 
 The resulting file project_bundle.txt will look like this:
@@ -111,13 +117,13 @@ The script automatically skips the following folders to save tokens:
 
 🎯 Custom Exclusions (`-e` / `--exclude`)
 
-Beyond the default exclusions, you can exclude any additional files or directories using the `-e` (or `--exclude`) flag. It accepts one or more glob-style patterns and works on:
+Beyond the default exclusions, you can exclude any additional files or directories using the `-e` (or `--exclude`) flag. It accepts one or more patterns and works on:
 
 * File or folder **names**, e.g. `-e Mocks` will exclude any file or folder named `Mocks` at any level of the project.
 * **Wildcards**, e.g. `-e "*.generated.swift"` will exclude all files ending in `.generated.swift`.
-* **Relative paths**, e.g. `-e "Views/Legacy/*"` will exclude everything inside `Views/Legacy/`.
+* **Relative paths**, e.g. `-e "Views/Legacy/*"` will exclude everything inside `Views/Legacy/`, and `-e "StoreSync/Localizable.xcstrings"` will exclude that exact file.
 
-Excluded folders are also removed from the project tree at the top of the output file (empty folders left over after filtering won't be shown either).
+Excluded folders and files are also removed from the project tree at the top of the output file (empty folders left over after filtering won't be shown either).
 
 Examples:
 
@@ -131,9 +137,14 @@ swift-pack . -e "*.generated.swift"
 # Exclude a specific nested folder
 swift-pack . -e "Views/Legacy/*"
 
+# Exclude a concrete file by relative path
+swift-pack . -e "StoreSync/Localizable.xcstrings"
+
 # Combine several patterns at once
 swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*" "*Tests.swift"
 ```
+
+Supported bundle content includes common source and text-based resource files such as `.swift`, `.strings`, `.xcstrings`, `.plist`, `.json`, `.yaml`, `.yml`, `.xml`, and similar text files.
 
 > ⚠️ Tip: quote patterns that contain `*` (e.g. `"*.generated.swift"`) so your shell doesn't try to expand them itself.
 
