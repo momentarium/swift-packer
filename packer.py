@@ -79,8 +79,13 @@ def get_tree(path, root_path, exclude_patterns, prefix=""):
 
 def pack_project(input_dir, output_file, exclude_patterns):
     root_path = Path(input_dir).resolve()
+    output_path = Path(output_file)
+    if not output_path.is_absolute():
+        output_path = (root_path / output_path).resolve()
 
-    with open(output_file, 'w', encoding='utf-8') as out:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_path, 'w', encoding='utf-8') as out:
         # 1. Пишем заголовок и дерево файлов
         out.write("PROJECT STRUCTURE:\n")
         out.write("================================================\n")

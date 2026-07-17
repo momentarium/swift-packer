@@ -1,0 +1,66 @@
+PROJECT STRUCTURE:
+================================================
+Root: ExcludedProject
+├── Generated/
+│   └── Thing.generated.swift
+├── Mocks/
+│   └── Fake.swift
+├── Models/
+│   └── User.swift
+├── Views/
+│   ├── Legacy/
+│   │   └── LegacyView.swift
+│   └── MainView.swift
+└── AppDelegate.swift
+================================================
+
+
+
+--- FILE START: AppDelegate.swift ---
+```swift
+import UIKit
+
+final class AppDelegate {}
+
+```
+--- FILE END: AppDelegate.swift ---
+
+
+--- FILE START: Models/User.swift ---
+```swift
+struct User { let id: String }
+
+```
+--- FILE END: Models/User.swift ---
+
+
+--- FILE START: Mocks/Fake.swift ---
+```swift
+struct Fake {}
+
+```
+--- FILE END: Mocks/Fake.swift ---
+
+
+--- FILE START: Views/MainView.swift ---
+```swift
+struct MainView {}
+
+```
+--- FILE END: Views/MainView.swift ---
+
+
+--- FILE START: Generated/Thing.generated.swift ---
+```swift
+struct GeneratedThing {}
+
+```
+--- FILE END: Generated/Thing.generated.swift ---
+
+
+--- FILE START: Views/Legacy/LegacyView.swift ---
+```swift
+struct LegacyView {}
+
+```
+--- FILE END: Views/Legacy/LegacyView.swift ---
