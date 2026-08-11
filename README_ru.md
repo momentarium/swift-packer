@@ -78,7 +78,7 @@ swift-pack . -e StoreSync/Localizable.xcstrings
 
 Файл `project_bundle.txt` будет выглядеть примерно так:
 
-```
+```txt
 PROJECT STRUCTURE:
 ================================================
 Root: AquaBomber
@@ -92,23 +92,19 @@ Root: AquaBomber
 ================================================
 
 --- FILE START: GameModel.swift ---
-```swift
 struct GameState {
     var score: Int = 0
 }
-```
 --- FILE END: GameModel.swift ---
 
 
 --- FILE START: Water.metal ---
-```metal
 #include <metal_stdlib>
 using namespace metal;
 
 kernel void waterSimulation(...) {
     // Симуляция физики воды
 }
-```
 --- FILE END: Water.metal ---
 ```
 
