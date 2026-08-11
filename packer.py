@@ -44,6 +44,35 @@ SUPPORTED_EXTENSIONS = {
     '.metal'
 }
 
+# Маппинг расширений файлов на языки для подсветки синтаксиса
+LANGUAGE_MAP = {
+    '.swift': 'swift',
+    '.metal': 'metal',
+    '.json': 'json',
+    '.yaml': 'yaml',
+    '.yml': 'yaml',
+    '.xml': 'xml',
+    '.plist': 'xml',
+    '.py': 'python',
+    '.sh': 'bash',
+    '.rb': 'ruby',
+    '.java': 'java',
+    '.kt': 'kotlin',
+    '.c': 'c',
+    '.h': 'c',
+    '.cpp': 'cpp',
+    '.cc': 'cpp',
+    '.cxx': 'cpp',
+    '.mm': 'objc',
+    '.m': 'objc',
+    '.hpp': 'cpp',
+}
+
+
+def get_language(path: Path) -> str:
+    """Определяет язык программирования для подсветки синтаксиса файла."""
+    return LANGUAGE_MAP.get(path.suffix.lower(), 'text')
+
 
 def is_bundle_file(path: Path) -> bool:
     """Определяет, является ли файл подходящим для включения в bundle."""
@@ -136,7 +165,7 @@ def pack_project(input_dir, output_file, exclude_patterns):
                 continue
 
             out.write(f"\n\n--- FILE START: {relative_path} ---\n")
-            language = "swift" if path.suffix == ".swift" else "text"
+            language = get_language(path)
             out.write(f"```{language}\n")
             try:
                 out.write(path.read_text(encoding='utf-8'))
