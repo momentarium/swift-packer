@@ -7,9 +7,25 @@ from pathlib import Path
 # Список папок, которые мы игнорируем по умолчанию
 EXCLUDE_DIRS = {
     '.git', 'Pods', '.build', 'DerivedData',
-    'build', 'tests', 'Fastlane', '.xcodeproj', '.xcworkspace',
+    'build', 'tests', 'Fastlane',
     'xcuserdata', 'xcschemes', 'xcuserdatad'
 }
+
+
+def should_exclude_dir(dir_name: str) -> bool:
+    """
+    Проверяет, должна ли папка быть исключена по умолчанию.
+    Проверяет как точное совпадение, так и суффиксы (.xcodeproj, .xcworkspace).
+    """
+    # Точное совпадение или в списке
+    if dir_name in EXCLUDE_DIRS:
+        return True
+    
+    # Проверка суффиксов для Xcode-специфичных папок
+    if dir_name.endswith('.xcodeproj') or dir_name.endswith('.xcworkspace'):
+        return True
+    
+    return False
 
 
 def is_excluded(rel_path: Path, patterns) -> bool:
@@ -99,7 +115,7 @@ def get_tree(path, root_path, exclude_patterns, prefix=""):
     # Отфильтровываем дефолтные и пользовательские исключения
     filtered = []
     for p in paths:
-        if p.name in EXCLUDE_DIRS:
+        if should_exclude_dir(p.name):
             continue
         rel = p.relative_to(root_path)
         if is_excluded(rel, exclude_patterns):
@@ -152,7 +168,7 @@ def pack_project(input_dir, output_file, exclude_patterns):
                 continue
 
             # Проверка дефолтных исключенных папок
-            if any(part in EXCLUDE_DIRS for part in path.parts):
+            if any(should_exclude_dir(part) for part in path.parts):
                 continue
 
             relative_path = path.relative_to(root_path)
