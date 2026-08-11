@@ -15,14 +15,14 @@ EXCLUDE_DIRS = {
 def should_exclude_dir(dir_name: str) -> bool:
     """
     Проверяет, должна ли папка быть исключена по умолчанию.
-    Проверяет как точное совпадение, так и суффиксы (.xcodeproj, .xcworkspace).
+    Проверяет как точное совпадение, так и суффиксы (.xcodeproj, .xcworkspace, .xcassets).
     """
     # Точное совпадение или в списке
     if dir_name in EXCLUDE_DIRS:
         return True
     
     # Проверка суффиксов для Xcode-специфичных папок
-    if dir_name.endswith('.xcodeproj') or dir_name.endswith('.xcworkspace'):
+    if dir_name.endswith('.xcodeproj') or dir_name.endswith('.xcworkspace') or dir_name.endswith('.xcassets'):
         return True
     
     return False
