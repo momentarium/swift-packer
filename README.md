@@ -94,23 +94,19 @@ Root: AquaBomber
 ================================================
 
 --- FILE START: GameModel.swift ---
-```swift
 struct GameState {
     var score: Int = 0
 }
-```
 --- FILE END: GameModel.swift ---
 
 
 --- FILE START: Water.metal ---
-```metal
 #include <metal_stdlib>
 using namespace metal;
 
 kernel void waterSimulation(...) {
     // Water physics simulation
 }
-```
 --- FILE END: Water.metal ---
 ```
 
