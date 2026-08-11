@@ -13,9 +13,10 @@ This tool is specifically designed for preparing context when working with LLMs 
 ## Features
 
 * 📂 Project Tree Generation: Creates a visual directory structure at the beginning of the file.
-* 🧹 Smart Filtering: Automatically ignores `Pods`, `DerivedData`, `.git`, `build`, and other system folders.
+* 🧹 Smart Filtering: Automatically ignores `Pods`, `DerivedData`, `.git`, `build`, `*.xcodeproj`, `*.xcworkspace`, `*.xcassets`, and other system folders.
 * 🎯 Custom Exclusions: Exclude any additional files or folders using glob patterns or exact relative paths (for example `Mocks`, `*.generated.swift`, `Views/Legacy/*`, or `StoreSync/Localizable.xcstrings`).
-* 🎨 Markdown Highlighting: Included files are wrapped in fenced code blocks with a language hint, such as `swift` for Swift sources and `text` for other text-based assets.
+* 🎨 Markdown Highlighting: Included files are wrapped in fenced code blocks with proper language hints for syntax highlighting (e.g., `swift`, `metal`, `json`, `yaml`, etc.).
+* 🔧 Multi-Language Support: Supports Swift, Metal, Objective-C, C/C++, Python, Ruby, Kotlin, and more.
 * 🧩 Lightweight: Written in pure Python, requires no external dependencies.
 
 ## Installation
@@ -82,21 +83,35 @@ The resulting file project_bundle.txt will look like this:
 ```
 PROJECT STRUCTURE:
 ================================================
-Root: MyApp
-├── Models/
-│   └── User.swift
-├── Views/
-│   └── MainView.swift
-└── AppDelegate.swift
+Root: AquaBomber
+├── AquaBomberApp.swift
+├── Components.swift
+├── GameModel.swift
+├── GameView.swift
+├── Water.metal
+└── Shaders/
+    └── Effects.metal
 ================================================
 
---- FILE START: Models/User.swift ---
+--- FILE START: GameModel.swift ---
 ```swift
-struct User {
-    let name: String
+struct GameState {
+    var score: Int = 0
 }
---- FILE END: Models/User.swift ---
+```
+--- FILE END: GameModel.swift ---
 
+
+--- FILE START: Water.metal ---
+```metal
+#include <metal_stdlib>
+using namespace metal;
+
+kernel void waterSimulation(...) {
+    // Water physics simulation
+}
+```
+--- FILE END: Water.metal ---
 ```
 
 ## Tips for Working with ChatGPT / Claude
@@ -115,11 +130,12 @@ or in Russian:
 
 ## Default Exclusions
 
-The script automatically skips the following folders to save tokens:
+The script automatically skips the following folders and patterns to save tokens and keep focus on source code:
 
 * `.git`, `Pods`, `.build`, `DerivedData`
 * `build`, `tests`, `Fastlane`
-* `.xcodeproj`, `.xcworkspace`
+* `*.xcodeproj`, `*.xcworkspace`, `*.xcassets`
+* `xcuserdata`, `xcschemes`, `xcuserdatad` (Xcode user data)
 
 ## Custom Exclusions (`-e` / `--exclude`)
 
@@ -150,16 +166,21 @@ swift-pack . -e "StoreSync/Localizable.xcstrings"
 swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*" "*Tests.swift"
 ```
 ## Supported Files
-Supported bundle content includes common source and text-based resource files such as `.swift`, `.strings`, `.xcstrings`, `.plist`, `.json`, `.yaml`, `.yml`, `.xml`, and similar text files.
+
+Supported bundle content includes common source and text-based resource files:
+
+* **Swift**: `.swift`
+* **Metal**: `.metal` (GPU shaders)
+* **Objective-C**: `.m`, `.h`, `.mm`
+* **C/C++**: `.c`, `.cpp`, `.hpp`, `.cc`, `.cxx`
+* **Configuration & Data**: `.plist`, `.json`, `.yaml`, `.yml`, `.xml`, `.strings`, `.xcstrings`
+* **Scripts**: `.py`, `.sh`, `.rb`
+* **Other**: `.java`, `.kt` and similar text-based source files
 
 > ⚠️ Tip: quote patterns that contain `*` (e.g. `"*.generated.swift"`) so your shell doesn't try to expand them itself.
 
 Created for convenient Swift development 🚀
 
-
-
-
 * `.git`, `Pods`, `.build`, `DerivedData`
 * `build`, `tests`, `Fastlane`
 * `.xcodeproj`, `.xcworkspace`
-

@@ -11,9 +11,10 @@ Swift-Packer — это простой инструмент командной �
 ## Возможности
 
 * 📂 Генерация структуры проекта: создает визуальное дерево каталогов в начале файла.
-* 🧹 Умная фильтрация: автоматически исключает `Pods`, `DerivedData`, `.git`, `build` и другие системные папки.
+* 🧹 Умная фильтрация: автоматически исключает `Pods`, `DerivedData`, `.git`, `build`, `*.xcodeproj`, `*.xcworkspace`, `*.xcassets` и другие системные папки.
 * 🎯 Пользовательские исключения: можно исключать дополнительные файлы и папки с помощью glob-паттернов или точных относительных путей (например, `Mocks`, `*.generated.swift`, `Views/Legacy/*` или `StoreSync/Localizable.xcstrings`).
-* 🎨 Подсветка Markdown: включенные файлы оборачиваются в блоки кода с указанием языка, например `swift` для Swift-исходников и `text` для других текстовых ресурсов.
+* 🎨 Подсветка Markdown: включенные файлы оборачиваются в блоки кода с правильным указанием языка для подсветки синтаксиса (например, `swift`, `metal`, `json`, `yaml` и т.д.).
+* 🔧 Поддержка многих языков: поддерживает Swift, Metal, Objective-C, C/C++, Python, Ruby, Kotlin и другие.
 * 🧩 Легковесность: написано на чистом Python, не требует внешних зависимостей.
 
 ## Установка
@@ -80,20 +81,35 @@ swift-pack . -e StoreSync/Localizable.xcstrings
 ```
 PROJECT STRUCTURE:
 ================================================
-Root: MyApp
-├── Models/
-│   └── User.swift
-├── Views/
-│   └── MainView.swift
-└── AppDelegate.swift
+Root: AquaBomber
+├── AquaBomberApp.swift
+├── Components.swift
+├── GameModel.swift
+├── GameView.swift
+├── Water.metal
+└── Shaders/
+    └── Effects.metal
 ================================================
 
---- FILE START: Models/User.swift ---
+--- FILE START: GameModel.swift ---
 ```swift
-struct User {
-    let name: String
+struct GameState {
+    var score: Int = 0
 }
---- FILE END: Models/User.swift ---
+```
+--- FILE END: GameModel.swift ---
+
+
+--- FILE START: Water.metal ---
+```metal
+#include <metal_stdlib>
+using namespace metal;
+
+kernel void waterSimulation(...) {
+    // Симуляция физики воды
+}
+```
+--- FILE END: Water.metal ---
 ```
 
 ## Советы для работы с ChatGPT / Claude
@@ -106,11 +122,12 @@ struct User {
 
 ## Исключения по умолчанию
 
-Скрипт автоматически пропускает следующие папки, чтобы экономить токены:
+Скрипт автоматически пропускает следующие папки и шаблоны, чтобы экономить токены и сохранять фокус на исходном коде:
 
 * `.git`, `Pods`, `.build`, `DerivedData`
 * `build`, `tests`, `Fastlane`
-* `.xcodeproj`, `.xcworkspace`
+* `*.xcodeproj`, `*.xcworkspace`, `*.xcassets`
+* `xcuserdata`, `xcschemes`, `xcuserdatad` (пользовательские данные Xcode)
 
 ## Пользовательские исключения (`-e` / `--exclude`)
 
@@ -143,7 +160,15 @@ swift-pack . -e Mocks "*.generated.swift" "Views/Legacy/*" "*Tests.swift"
 
 ## Поддерживаемые файлы
 
-Поддерживаются общие исходные и текстовые ресурсы, такие как `.swift`, `.strings`, `.xcstrings`, `.plist`, `.json`, `.yaml`, `.yml`, `.xml` и похожие текстовые файлы.
+Поддерживаются общие исходные и текстовые ресурсы:
+
+* **Swift**: `.swift`
+* **Metal**: `.metal` (GPU шейдеры)
+* **Objective-C**: `.m`, `.h`, `.mm`
+* **C/C++**: `.c`, `.cpp`, `.hpp`, `.cc`, `.cxx`
+* **Конфигурация и данные**: `.plist`, `.json`, `.yaml`, `.yml`, `.xml`, `.strings`, `.xcstrings`
+* **Скрипты**: `.py`, `.sh`, `.rb`
+* **Прочее**: `.java`, `.kt` и подобные текстовые исходники
 
 > ⚠️ Совет: заключайте шаблоны с `*` в кавычки (например, "*.generated.swift"), чтобы оболочка не пыталась расширить их.
 
