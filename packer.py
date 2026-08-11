@@ -7,7 +7,8 @@ from pathlib import Path
 # Список папок, которые мы игнорируем по умолчанию
 EXCLUDE_DIRS = {
     '.git', 'Pods', '.build', 'DerivedData',
-    'build', 'tests', 'Fastlane', '.xcodeproj', '.xcworkspace'
+    'build', 'tests', 'Fastlane', '.xcodeproj', '.xcworkspace',
+    'xcuserdata', 'xcschemes', 'xcuserdatad'
 }
 
 
@@ -39,7 +40,8 @@ def is_excluded(rel_path: Path, patterns) -> bool:
 
 SUPPORTED_EXTENSIONS = {
     '.swift', '.strings', '.xcstrings', '.plist', '.json', '.yaml', '.yml', '.xml',
-    '.h', '.m', '.mm', '.c', '.cpp', '.hpp', '.cc', '.cxx', '.kt', '.java', '.rb', '.py', '.sh'
+    '.h', '.m', '.mm', '.c', '.cpp', '.hpp', '.cc', '.cxx', '.kt', '.java', '.rb', '.py', '.sh',
+    '.metal'
 }
 
 
